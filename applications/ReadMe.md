@@ -80,3 +80,4 @@ Utility apps not visible in other menus, plus few external apps pre-packaged wit
 - `storage_move_to_sd`  - Data migration tool for internal storage
 - `updater`             - Update service & application
 - `mfkey`               - MIFARE Classic key recovery tool
+- `picopass`            - Picopass tool

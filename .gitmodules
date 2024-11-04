@@ -35,3 +35,6 @@
 [submodule "documentation/doxygen/doxygen-awesome-css"]
 	path = documentation/doxygen/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
+[submodule "applications/system/picopass"]
+	path = applications/system/picopass
+	url = https://gitlab.com/bettse/picopass.git

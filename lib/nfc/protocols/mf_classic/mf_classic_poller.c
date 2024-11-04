@@ -6,11 +6,11 @@
 
 #define TAG "MfClassicPoller"
 
-// TODO: Buffer writes for Hardnested, set state to Log when finished and sum property matches
-// TODO: Store target key in CUID dictionary
-// TODO: Dead code for malloc returning NULL?
-// TODO: Auth1 static encrypted exists (rare)
-// TODO: Use keys found by NFC plugins, cached keys
+// TODO FL-3926: Buffer writes for Hardnested, set state to Log when finished and sum property matches
+// TODO FL-3926: Store target key in CUID dictionary
+// TODO FL-3926: Dead code for malloc returning NULL?
+// TODO FL-3926: Auth1 static encrypted exists (rare)
+// TODO FL-3926: Use keys found by NFC plugins, cached keys
 
 #define MF_CLASSIC_MAX_BUFF_SIZE (64)
 
@@ -606,7 +606,7 @@ NfcCommand mf_classic_poller_handler_analyze_backdoor(MfClassicPoller* instance)
 }
 
 NfcCommand mf_classic_poller_handler_backdoor_read_sector(MfClassicPoller* instance) {
-    // TODO: Reauth not needed
+    // TODO FL-3926: Reauth not needed
     NfcCommand command = NfcCommandContinue;
     MfClassicPollerDictAttackContext* dict_attack_ctx = &instance->mode_ctx.dict_attack_ctx;
     MfClassicError error = MfClassicErrorNone;
@@ -1289,8 +1289,6 @@ NfcCommand mf_classic_poller_handler_nested_calibrate(MfClassicPoller* instance)
         float std_dev = sqrtf(variance);
 
         // Filter out values over 3 standard deviations away from the median
-        dict_attack_ctx->d_min = UINT16_MAX;
-        dict_attack_ctx->d_max = 0;
         for(uint8_t i = 0; i < valid_distances; i++) {
             if(fabsf((float)distances[i] - median) <= 3 * std_dev) {
                 if(distances[i] < dict_attack_ctx->d_min) dict_attack_ctx->d_min = distances[i];
@@ -1328,8 +1326,8 @@ static inline bool is_byte_found(uint8_t* found, uint8_t byte) {
 }
 
 NfcCommand mf_classic_poller_handler_nested_collect_nt_enc(MfClassicPoller* instance) {
-    // TODO: Handle when nonce is not collected (retry counter? Do not increment nested_target_key)
-    // TODO: Look into using MfClassicNt more
+    // TODO FL-3926: Handle when nonce is not collected (retry counter? Do not increment nested_target_key)
+    // TODO FL-3926: Look into using MfClassicNt more
     NfcCommand command = NfcCommandContinue;
     MfClassicPollerDictAttackContext* dict_attack_ctx = &instance->mode_ctx.dict_attack_ctx;
 
@@ -1563,8 +1561,8 @@ static MfClassicKey* search_dicts_for_nonce_key(
 }
 
 NfcCommand mf_classic_poller_handler_nested_dict_attack(MfClassicPoller* instance) {
-    // TODO: Handle when nonce is not collected (retry counter? Do not increment nested_target_key)
-    // TODO: Look into using MfClassicNt more
+    // TODO FL-3926: Handle when nonce is not collected (retry counter? Do not increment nested_target_key)
+    // TODO FL-3926: Look into using MfClassicNt more
     NfcCommand command = NfcCommandContinue;
     MfClassicPollerDictAttackContext* dict_attack_ctx = &instance->mode_ctx.dict_attack_ctx;
 
@@ -1706,7 +1704,7 @@ NfcCommand mf_classic_poller_handler_nested_log(MfClassicPoller* instance) {
         if(weak_prng && (!(static_encrypted)) && (dict_attack_ctx->nested_nonce.count != 2)) {
             FURI_LOG_E(
                 TAG,
-                "MfClassicPollerStateNestedLog expected 2 nonces, received %u",
+                "MfClassicPollerStateNestedLog expected 2 nonces, received %zu",
                 dict_attack_ctx->nested_nonce.count);
             break;
         }
@@ -1722,7 +1720,7 @@ NfcCommand mf_classic_poller_handler_nested_log(MfClassicPoller* instance) {
         bool params_write_success = true;
         for(size_t i = 0; i < nonce_pair_count; i++) {
             MfClassicNestedNonce* nonce = &dict_attack_ctx->nested_nonce.nonces[i];
-            // TODO: Avoid repeating logic here
+            // TODO FL-3926: Avoid repeating logic here
             uint8_t nonce_sector = nonce->key_idx / (weak_prng ? 4 : 2);
             MfClassicKeyType nonce_key_type =
                 (nonce->key_idx % (weak_prng ? 4 : 2) < (weak_prng ? 2 : 1)) ? MfClassicKeyTypeA :
@@ -1780,7 +1778,7 @@ NfcCommand mf_classic_poller_handler_nested_log(MfClassicPoller* instance) {
 bool mf_classic_nested_is_target_key_found(MfClassicPoller* instance, bool is_dict_attack) {
     MfClassicPollerDictAttackContext* dict_attack_ctx = &instance->mode_ctx.dict_attack_ctx;
     bool is_weak = dict_attack_ctx->prng_type == MfClassicPrngTypeWeak;
-    uint8_t nested_target_key = dict_attack_ctx->nested_target_key;
+    uint16_t nested_target_key = dict_attack_ctx->nested_target_key;
 
     MfClassicKeyType target_key_type;
     uint8_t target_sector;
@@ -1857,7 +1855,7 @@ NfcCommand mf_classic_poller_handler_nested_controller(MfClassicPoller* instance
         } else if(dict_attack_ctx->prng_type == MfClassicPrngTypeNoTag) {
             FURI_LOG_E(TAG, "No tag detected");
             // Free nonce array
-            // TODO: Consider using .count here
+            // TODO FL-3926: Consider using .count here
             if(dict_attack_ctx->nested_nonce.nonces) {
                 free(dict_attack_ctx->nested_nonce.nonces);
                 dict_attack_ctx->nested_nonce.nonces = NULL;
@@ -1868,7 +1866,7 @@ NfcCommand mf_classic_poller_handler_nested_controller(MfClassicPoller* instance
         }
         if(dict_attack_ctx->nested_nonce.nonces) {
             // Free nonce array
-            // TODO: Consider using .count here
+            // TODO FL-3926: Consider using .count here
             free(dict_attack_ctx->nested_nonce.nonces);
             dict_attack_ctx->nested_nonce.nonces = NULL;
             dict_attack_ctx->nested_nonce.count = 0;
@@ -1881,9 +1879,10 @@ NfcCommand mf_classic_poller_handler_nested_controller(MfClassicPoller* instance
     uint16_t dict_target_key_max = (dict_attack_ctx->prng_type == MfClassicPrngTypeWeak) ?
                                        (instance->sectors_total * 2) :
                                        (instance->sectors_total * 16);
-    if(dict_attack_ctx->nested_phase == MfClassicNestedPhaseDictAttackResume) {
+    if(dict_attack_ctx->nested_phase == MfClassicNestedPhaseDictAttackVerify) {
         if(!(mf_classic_nested_is_target_key_found(instance, true)) &&
            (dict_attack_ctx->nested_nonce.count > 0)) {
+            dict_attack_ctx->nested_phase = MfClassicNestedPhaseDictAttackResume;
             instance->state = MfClassicPollerStateNestedDictAttack;
             return command;
         } else {
@@ -1898,7 +1897,8 @@ NfcCommand mf_classic_poller_handler_nested_controller(MfClassicPoller* instance
             dict_attack_ctx->nested_phase = MfClassicNestedPhaseDictAttack;
         }
     }
-    if((dict_attack_ctx->nested_phase == MfClassicNestedPhaseDictAttack) &&
+    if((dict_attack_ctx->nested_phase == MfClassicNestedPhaseDictAttack ||
+        dict_attack_ctx->nested_phase == MfClassicNestedPhaseDictAttackResume) &&
        (dict_attack_ctx->nested_target_key < dict_target_key_max)) {
         bool is_last_iter_for_hard_key =
             ((!is_weak) && ((dict_attack_ctx->nested_target_key % 8) == 7));
@@ -1922,15 +1922,18 @@ NfcCommand mf_classic_poller_handler_nested_controller(MfClassicPoller* instance
                     NULL;
         }
         if((is_weak || is_last_iter_for_hard_key) && dict_attack_ctx->nested_nonce.count > 0) {
-            // Key reuse
-            dict_attack_ctx->nested_phase = MfClassicNestedPhaseDictAttackResume;
+            // Key verify and reuse
+            dict_attack_ctx->nested_phase = MfClassicNestedPhaseDictAttackVerify;
             dict_attack_ctx->auth_passed = false;
             instance->state = MfClassicPollerStateKeyReuseStartNoOffset;
             return command;
+        } else if(dict_attack_ctx->nested_phase == MfClassicNestedPhaseDictAttackResume) {
+            dict_attack_ctx->nested_phase = MfClassicNestedPhaseDictAttack;
+            dict_attack_ctx->auth_passed = true;
         }
         if(!(dict_attack_ctx->auth_passed)) {
             dict_attack_ctx->attempt_count++;
-        } else if(dict_attack_ctx->auth_passed && !(initial_dict_attack_iter)) {
+        } else if(!(initial_dict_attack_iter)) {
             dict_attack_ctx->nested_target_key++;
             dict_attack_ctx->attempt_count = 0;
         }
