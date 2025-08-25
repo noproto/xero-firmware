@@ -8,5 +8,5 @@ After collecting nonces using the Extract MF Keys option, press the Start button
 
 ## Credits
 
-Developers: noproto, AG, Flipper Devices, WillyJL
+Developers: noproto, AG, Flipper Devices, WillyJL, CavallUwU, Ivisayan
 Thanks: AloneLiberty, Foxushka, bettse, Equip

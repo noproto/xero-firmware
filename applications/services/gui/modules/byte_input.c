@@ -861,6 +861,10 @@ void byte_input_set_result_callback(
             model->callback_context = callback_context;
             model->bytes = bytes;
             model->bytes_count = bytes_count;
+            // Zero out the bytes
+            for(uint8_t i = 0; i < bytes_count; i++) {
+                model->bytes[i] = 0;
+            }
         },
         true);
 }
