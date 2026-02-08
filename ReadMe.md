@@ -30,14 +30,19 @@ Coming from other custom firmware, you'll get:
 
 - **MIFARE Classic Key recovery improvements**
   - *MIFARE Classic Accelerated dictionary attack*: dictionary attacks reduced to several seconds - checks ~3500 keys per second
-  - *MIFARE Classic Nested attack support*: collects nested nonces to be cracked by MFKey
+  - *MIFARE Classic Nested attack support*: collects Nested nonces to be cracked by MFKey
   - *MIFARE Classic Static encrypted backdoor support*: collects static encrypted nonces to be cracked by MFKey using NXP/Fudan backdoor
 - **MFKey 4.0**: Mfkey32, Static Nested, and Static Encrypted attacks all on your Flipper Zero
 - **MIFARE Ultralight C Dictionary attack**: Ultralight C key management and bruteforce attacks, feature parity with MIFARE Classic
-- **MIFARE Ultralight C Key recovery** (NXP disclosure in progress!)
+- **MIFARE Ultralight C Key recovery**: Novel research on Ultralight C attacks: [BREAKMEIFYOUCAN!: Exploiting Keyspace Reduction and Relay Attacks in 3DES and AES-protected NFC Technologies](https://breakmeifyoucan.com/) https://eprint.iacr.org/2026/100
+- **Xero exclusive apps** (coming soon! Multiple PRs created for Flipper networking support - no WiFi Dev Board needed)
+  - MFKeyX: Rapid key recovery for MIFARE Classic - all attacks (coming soon!)
+  - ULCFKeyX: Offload cracking counterfeit Ultralight C (3DES) keys from your Flipper Zero (coming soon!)
+  - SeaderX: Give your Flipper a SAM without touching GPIO (coming soon!)
+- **Xero exclusive plugins** (coming soon!)
 - **NFC app memory improvements** (coming soon!)
 - **Minimal theme** (coming soon!)
-- *Future*: Tesla credential enrollment, MIFARE Classic EV1 support (signature sector Nested attacks), fully locked Ultralight C support, faster static encrypted attacks
+- *Future*: Tesla credential enrollment, MIFARE Classic EV1 support (signature sector Nested attacks), fully locked Ultralight C support
 
 # Contributing
 
